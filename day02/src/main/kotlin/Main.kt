@@ -1,23 +1,6 @@
 import java.io.File
 
-fun isGamePossible(text: String) : Boolean {
-    val maxCount = mapOf("red" to 12, "green" to 13, "blue" to 14)
-    val games = text.split(";")
-    games.forEach {game ->
-        val cubes = game.split(",")
-        cubes.forEach {cube ->
-            val s = cube.trim().split(" ")
-            val count = s[0].toInt()
-            val color = s[1]
-            if (count > maxCount[color]!!) {
-                return false
-            }
-        }
-    }
-    return true
-}
-
-fun getPower(text: String) : Long {
+fun getCubeCount(text: String) : Map<String, Int> {
     val maxCount = mutableMapOf("red" to 0, "green" to 0, "blue" to 0)
     val games = text.split(";")
     games.forEach {game ->
@@ -31,7 +14,16 @@ fun getPower(text: String) : Long {
             }
         }
     }
-    return maxCount.values.map { it.toLong() }.reduce{ a, b -> a * b}
+    return maxCount.toMap()
+}
+
+fun isGamePossible(text: String) : Boolean {
+    val maxCount = mapOf("red" to 12, "green" to 13, "blue" to 14)
+    return getCubeCount(text).all { (color, count) -> count <= maxCount[color]!! }
+}
+
+fun getPower(text: String) : Long {
+    return getCubeCount(text).values.map { it.toLong() }.reduce { a, b -> a * b}
 }
 
 fun main(args: Array<String>) {
