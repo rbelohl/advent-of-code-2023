@@ -36,9 +36,9 @@ fun compareHands(hand1: String, hand2: String, part: Int) : Int {
 }
 
 fun getHandType(hand: String) : Int {
-    val countsSorted = hand.map { c ->
+    val countsSorted = hand.associate { c ->
         c to hand.count { it == c }
-    }.toMap().values.sortedDescending()
+    }.values.sortedDescending()
 
     if (countsSorted[0] == 5) {
         return 6 // five of a kind
@@ -66,9 +66,9 @@ fun convertJoker(hand: String) : String {
     if (hand == "JJJJJ") {
         return hand
     }
-    val highestCount = hand.map { c ->
+    val highestCount = hand.associate { c ->
         c to hand.count { it == c }
-    }.toMap().entries.filter{ it.key != 'J'}.maxBy { it.value }.key
+    }.entries.filter{ it.key != 'J'}.maxBy { it.value }.key
 
     return hand.replace('J', highestCount)
 }
